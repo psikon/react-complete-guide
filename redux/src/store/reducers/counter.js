@@ -1,11 +1,11 @@
-import * as actionTypes from '../actions';
+import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
     counter: 0,
 }
 
 const reducer = (state = initialState, action) => {
-    switch (action.type ) {
+    switch (action.type) {
         case actionTypes.INCREMENT:
                 // umstandliche Lösung
                 const newState = Object.assign({}, state);
