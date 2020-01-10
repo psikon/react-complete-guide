@@ -10,6 +10,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
+import { Redirect } from 'react-router-dom';
 
 
 class BurgerBuilder extends Component {
@@ -34,7 +35,11 @@ class BurgerBuilder extends Component {
     }
 
     purchaseHandler = () => {
-        this.setState({purchasing: true});
+        if (this.props.isAuthenticated) {
+            this.setState({purchasing: true});
+        } else {
+            this.props.history.push("/auth")
+        }
     }
 
     purchaseCancelHandler = () => {
@@ -68,7 +73,8 @@ class BurgerBuilder extends Component {
                         ingredientRemoved={this.props.onIngredientRemoved}
                         disabled={disabledInfo}
                         purchasable={this.updatePurchaseState(this.props.ings)} 
-                        ordered={this.purchaseHandler}/>);
+                        ordered={this.purchaseHandler}
+                        isAuth={this.props.isAuthenticated} />);
                 </Aux>);
             
             orderSummary =  <OrderSummary 
@@ -98,7 +104,8 @@ const mapStateToProps = state => {
     return {
         ings: state.burgerBuilder.ingredients,
         price: state.burgerBuilder.totalPrice,
-        error: state.burgerBuilder.error
+        error: state.burgerBuilder.error,
+        isAuthenticated: state.auth.token !== null
     }
 };
 
